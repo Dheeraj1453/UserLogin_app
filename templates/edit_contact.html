@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Contact - {{ contact.name }}{% endblock %}
+
+{% block content %}
+<div class="floating-overlay">
+  <div class="floating-card">
+    <div class="floating-card-header">
+      <h2 class="card-title">Edit Contact</h2>
+      <a href="{% url 'home' %}" class="btn-close" aria-label="Close">&times;</a>
+    </div>
+
+    <form action="{% url 'edit_contact' contact.id %}" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <!-- Avatar Preview & Upload -->
+      <div class="avatar-upload-wrapper">
+        {% if contact.image %}
+          <img src="{{ contact.image.url }}" alt="{{ contact.name }}" class="contact-avatar preview-avatar" id="avatarPreview">
+        {% else %}
+          <div class="contact-avatar placeholder-avatar preview-avatar" id="avatarPreview">
+            {{ contact.name|slice:":1"|upper }}
+          </div>
+        {% endif %}
+        <label for="image" class="avatar-upload-btn">Change Photo</label>
+        <input type="file" id="image" name="image" class="file-input-hidden" accept="image/*" onchange="previewImage(event)">
+      </div>
+
+      <!-- Contact Name -->
+      <div class="form-group">
+        <label for="name" class="form-label">Full Name</label>
+        <input type="text" id="name" name="name" class="form-input" value="{{ contact.name }}" required>
+      </div>
+
+      <!-- Contact Number -->
+      <div class="form-group">
+        <label for="contact_number" class="form-label">Contact Number</label>
+        <input type="tel" id="contact_number" name="contact_number" class="form-input" value="{{ contact.contact_number }}" required>
+      </div>
+
+      <!-- Relation -->
+      <div class="form-group">
+        <label for="relation" class="form-label">Relation</label>
+        <select id="relation" name="relation" class="form-select" required>
+          <option value="Family" {% if contact.relation == 'Family' %}selected{% endif %}>Family</option>
+          <option value="Friend" {% if contact.relation == 'Friend' %}selected{% endif %}>Friend</option>
+          <option value="Work" {% if contact.relation == 'Work' %}selected{% endif %}>Work</option>
+          <option value="Other" {% if contact.relation == 'Other' %}selected{% endif %}>Other</option>
+        </select>
+      </div>
+
+      <!-- Form Action Buttons -->
+      <div class="form-actions">
+        <a href="{% url 'home' %}" class="btn-cancel">Cancel</a>
+        <button type="submit" class="btn-primary">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  function previewImage(event) {
+    const input = event.target;
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const preview = document.getElementById('avatarPreview');
+        if (preview.tagName === 'IMG') {
+          preview.src = e.target.result;
+        } else {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.className = 'contact-avatar preview-avatar';
+          img.id = 'avatarPreview';
+          preview.parentNode.replaceChild(img, preview);
+        }
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+</script>
+{% endblock %}

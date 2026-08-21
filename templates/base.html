@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>{% block title %}MyContacts{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'styles.css' %}?v=2.3">
+</head>
+<body class="app-layout">
+
+  <!-- Mobile Backdrop Overlay -->
+  <div class="nav-backdrop" id="navBackdrop"></div>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-brand-wrapper">
+      <img src="{% static 'attachment_121844903.jpg' %}" alt="Logo" class="nav-logo">
+      <span class="nav-brand">MyContacts</span>
+    </div>
+
+    <!-- Transparent Hamburger Button (Perfectly Aligned Right) -->
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle Navigation">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+
+    <!-- Slide-in Drawer Navigation Menu -->
+    <div class="nav-menu" id="navMenu">
+      <div class="nav-links">
+        <a href="{% url 'home' %}" class="nav-link {% block nav_home %}{% endblock %}">Home</a>
+        <a href="{% url 'add_contact' %}" class="nav-link {% block nav_add %}{% endblock %}">Add Contact</a>
+      </div>
+      <div class="nav-right">
+        <a href="{% url 'logout' %}" class="btn-outline-danger">Logout</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  {% block content %}
+  {% endblock %}
+
+  <script>
+    const navToggle = document.getElementById('navToggle');
+    const navMenu = document.getElementById('navMenu');
+    const navBackdrop = document.getElementById('navBackdrop');
+
+    function toggleMenu() {
+      const isOpen = navMenu.classList.toggle('active');
+      navToggle.classList.toggle('open', isOpen);
+      navBackdrop.classList.toggle('active', isOpen);
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    }
+
+    if (navToggle && navMenu && navBackdrop) {
+      navToggle.addEventListener('click', toggleMenu);
+      navBackdrop.addEventListener('click', toggleMenu);
+    }
+  </script>
+</body>
+</html>

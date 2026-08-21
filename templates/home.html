@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Contacts{% endblock %}
+{% block nav_home %}active{% endblock %}
+
+{% block content %}
+<main class="main-content">
+
+  {% if contacts %}
+    <!-- Contact Header -->
+    <div class="contact-header">
+      <h2>Your Contacts</h2>
+      <a href="{% url 'add_contact' %}" class="btn-primary btn-small">+ Add New</a>
+    </div>
+
+    <!-- Contact Grid -->
+    <div class="contact-grid">
+      {% for contact in contacts %}
+        <div class="contact-card">
+          <div class="contact-info-wrapper">
+            
+            <!-- Contact Avatar / Image -->
+            {% if contact.image %}
+              <img src="{{ contact.image.url }}" alt="{{ contact.name }}" class="contact-avatar">
+            {% else %}
+              <div class="contact-avatar placeholder-avatar">
+                {{ contact.name|slice:":1"|upper }}
+              </div>
+            {% endif %}
+
+            <!-- Contact Details -->
+            <div class="contact-details">
+              <h3>{{ contact.name }}</h3>
+              <p class="contact-relation">{{ contact.relation }}</p>
+              <p class="contact-number">{{ contact.contact_number }}</p>
+            </div>
+          </div>
+
+          <!-- Contact Actions -->
+          <div class="contact-actions">
+            <a href="{% url 'edit_contact' contact.id %}" class="btn-edit">Edit</a>
+            
+            <form action="{% url 'delete_contact' %}" method="POST">
+            {% csrf_token %}
+           <input type="hidden" name="contact_id" value="{{ contact.id }}">
+           <button type="submit" class="btn-delete">Delete</button>
+           </form>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+  {% else %}
+    <!-- Empty State -->
+    <div class="empty-state">
+      <a href="{% url 'add_contact' %}" class="btn-huge-plus">+</a>
+      <p class="empty-state-text">Add a new contact</p>
+    </div>
+  {% endif %}
+
+</main>
+{% endblock %}

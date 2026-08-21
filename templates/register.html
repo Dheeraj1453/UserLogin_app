@@ -1,0 +1,103 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create New User</title>
+  
+  <!-- Linking to the separate CSS file -->
+  <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+
+  <div class="card-container">
+    <div class="logo-wrapper">
+      <img src="{% static 'attachment_121844903.jpg' %}" alt="Logo" class="logo-img">
+    </div>
+
+    <h1 class="card-title">Create New User</h1>
+    <p class="card-subtitle">Fill in the form below to register</p>
+
+    {% if error %}
+    <div class="error-message">
+        {{ error }}
+        </div>
+       {% endif %}
+
+    <form action="" method="POST">
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label for="name" class="form-label">Full Name</label>
+        <input 
+          type="text" 
+          id="name" 
+          name="name" 
+          class="form-input" 
+          placeholder="e.g. Dheeraj Kumar Jha" 
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="username" class="form-label">Username</label>
+        <input 
+          type="text" 
+          id="username" 
+          name="username" 
+          class="form-input" 
+          placeholder="Choose a username" 
+          required
+        >
+      </div>
+
+      <div class="form-group">
+       <label for="email" class="form-label">Email Address</label>
+
+       <input
+       type="email"
+       id="email"
+       name="email"
+       class="form-input"
+       placeholder="Enter your email address"
+       required>
+      </div>
+
+      <div class="form-group">
+        <label for="password" class="form-label">Password</label>
+        <input 
+          type="password" 
+          id="password" 
+          name="password" 
+          class="form-input" 
+          placeholder="••••••••" 
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="gender" class="form-label">Gender</label>
+        <select id="gender" name="gender" class="form-select" required>
+          <option value="" disabled selected>Select your gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn-primary" style="margin-top: 10px;">
+        Register
+      </button>
+    </form>
+
+    <div class="card-footer">
+      Already have an account? 
+      <!-- Ensure 'login' matches the name of your login path in urls.py -->
+      <a href="{% url 'login' %}">Log In</a>
+    </div>
+  </div>
+
+</body>
+</html>
