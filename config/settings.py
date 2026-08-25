@@ -131,3 +131,5 @@ MAILERS = {
 }
 
 DEFAULT_FROM_EMAIL = 'noreply@example.com'
+
+LOGIN_URL = '/login/'
